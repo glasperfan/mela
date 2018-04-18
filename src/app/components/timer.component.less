@@ -1,0 +1,196 @@
+@import 'shared';
+
+@section-width: 650px;
+@session-icon-width: 40px;
+@streak-item-width: 50px;
+:host {
+  margin-top: 75px;
+  transition: 0.5s all ease-out;
+
+  .main-display {
+    max-width: @section-width;
+    min-width: @section-width;
+    margin: 0 auto;
+    padding-bottom: 8em;
+    
+    .section {
+      min-width: @section-width;
+      position: relative;
+      .rounded;
+      
+      &.current {
+        min-height: 25em;
+        display: flex;
+        flex-direction: column;
+        background-color: @background-primary;
+      }
+      
+      .subsection {
+        .header {
+          .small-text;
+          text-align: right;
+          padding-top: 1.5em;
+          padding-right: 1.5em;
+        }
+      }
+    }
+
+    hr {
+      display: block;
+      height: 1px;
+      border: 0;
+      border-top: 1px solid @background-primary;
+      margin: 1em 0;
+      padding: 0;
+    }
+
+    #clock {
+      position: absolute;
+      padding: 1em 0 0 1em;
+    }
+
+    #timer {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+
+      .center-container {
+        .center;
+        flex-grow: 1;
+        flex-direction: column;
+        
+        .info {
+          text-align: center;
+          font-size: 8em;
+          font-weight: 600;
+          -webkit-text-stroke: 2px;
+        }
+        
+        .timer-button {
+          margin-bottom: 0.5em;
+        }
+      }
+    }
+
+    #streaks {
+      display: flex;
+      flex-direction: column;
+      min-height: 7em;
+
+      .streaks {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+        flex-grow: 1;
+        
+        >li {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-end;
+          width: @streak-item-width;
+
+          >.icon {
+            width: (@streak-item-width / 2);
+            height: (@streak-item-width / 2);
+          }
+        }
+      }
+    }
+
+    .session-item {
+      height: 4em;
+      display: flex;
+      align-items: center;
+      padding: 0.5em 1em;
+      background-color: @background-primary;
+      transition: all ease-out 0.2s;
+      margin: 1em 0;
+      .rounded;
+
+      .session-type {
+        flex-grow: 0;
+        min-width: 3em;
+        background-color: @background-light;
+        border-radius: 10px;
+        padding: 0.2em 0.1em;
+        .center;
+
+        >.icon {
+          width: @session-icon-width;
+          height: @session-icon-width;
+        }
+      }
+
+      .session-name {
+        flex-grow: 1;
+        text-align: center;
+
+        .current-time-left {
+          .small-text;
+        }
+      }
+
+      .session-delete {
+        width: @icon-width;
+        height: @icon-width;
+        opacity: 0;
+        .link;
+        transition: all ease-out 0.2s;
+        border-radius: 100%;
+        .center;
+
+        &:hover {
+          background-color: #DDD;
+        }
+
+        .delete-icon {
+          width: 15px;
+          height: 15px;
+        }
+      }
+
+      &:hover .session-delete {
+        opacity: 1;
+      }
+
+      input {
+        background-color: @background-primary;
+        color: @text-primary;
+        outline: none;
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 0.5em;
+        margin: 0 1em;
+        transition: 0.3s ease-out all;
+      }
+
+      input::placeholder {
+        color: @text-primary;
+      }
+      
+      input:hover, input:focus {
+        border-bottom: 1px solid #ea3e3e;
+      }
+
+      &.no-session-item {
+        .small-text;
+        .link;
+        .center;
+      }
+    }
+
+    @add-session-size: 1.8em;
+    .button.add-session {
+      position: fixed;
+      bottom: 1em;
+      right: 1em;
+      font-size: @add-session-size;
+      border-radius: 100%;
+      padding: 0;
+      line-height: @add-session-size;
+      height: @add-session-size;
+      width: @add-session-size;
+      text-align: center;
+    }
+  }
+}

@@ -1,0 +1,36 @@
+@import 'shared';
+
+:host {
+  background-color: @background-dark;
+  width: @dashboard-width;
+  transition: 0.5s all ease-out;
+}
+
+#credits {
+  .center;
+  .page-text;
+  font-size: initial;
+  height: 8em;
+
+  .by-us {
+    margin-left: 0.7em;
+    margin-top: 4px;
+    font-weight: 100;
+  }
+}
+
+.toc {
+  color: white;
+  padding: 0 1em;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  margin-top: 3em;
+  height: 16em;
+
+  >li {
+    .page-text;
+    .link;
+  }
+}

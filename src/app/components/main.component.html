@@ -1,0 +1,5 @@
+<img class="hamburger" [style.left]="playlistSvc.toggleDashboard ? '170px': '10px'"
+src="assets/menu.png"
+(click)="playlistSvc.toggleDashboard = !playlistSvc.toggleDashboard" />
+<dashboard [style.marginLeft]="playlistSvc.toggleDashboard ? '0': '-160px'"></dashboard>
+<timer [style.width]="!playlistSvc.toggleDashboard ? '100%' : 'calc(100% - 160px)'"></timer>

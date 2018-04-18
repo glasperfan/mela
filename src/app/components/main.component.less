@@ -1,0 +1,17 @@
+@import 'shared';
+
+:host {
+  display: flex;
+  background-color: @background-dark;
+  color: @text-primary;
+  height: 100%;
+}
+
+.hamburger {
+  width: 25px;
+  display: none; // hide menu toggle for now
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  transition: left 0.5s ease-out;
+}

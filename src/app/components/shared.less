@@ -1,0 +1,99 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,700');
+
+@dashboard-width: 160px;
+@block-height: 90px; // 9:16 ratio to dashboard width
+@clock-width: 300px;
+@pause-btn-width: 200px;
+@icon-width: 25px;
+
+@background-dark: #7f0000; // should match main.component.ts update
+@background-light: #f05545; // should match fill and stroke in timer wheel (display.component.ts)
+@background-primary: #b71c1c;
+@text-primary: #fff;
+@text-secondary: @background-light;
+
+* {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1em;
+}
+
+html, body {
+  background-color: @background-dark;
+}
+
+span {
+  white-space: pre;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.small-text {
+  font-size: 0.85em;
+  color: @text-secondary;
+  text-transform: uppercase;
+}
+
+.button {
+  cursor: pointer;
+  background-color: #eb3d3e;
+  color: white;
+  text-transform: uppercase;
+  border-radius: 1em;
+  padding: 0.5em 3em;
+  user-select: none;
+  transition: background-color 0.15s ease-out;
+
+  &:hover {
+    background-color: #de2626;
+  }
+}
+
+.link {
+  cursor: pointer;
+}
+
+.icon {
+  width: @icon-width;
+  height: @icon-width;
+}
+
+.rounded {
+  border-radius: 1.5em;
+}
+
+ul.dropdown {
+  list-style: none;
+  background: #ffffff;
+  position: absolute;
+  left: 0;
+  margin-top: 29px;
+
+  li {
+    display: flex;
+    width: 130px;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    transition: all 0.2s ease-out;
+  }
+
+  li:hover {
+    background: #666;
+    color: #ddd;
+  }
+}
+
+.page-text {
+  .small-text;
+  color: white;
+}
+
+.page-header {
+  .page-text;
+  line-height: 2em;
+  margin-bottom: 1em;
+}
