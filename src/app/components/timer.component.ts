@@ -65,11 +65,14 @@ export class TimerComponent implements OnInit, OnDestroy {
     const self = this;
     // Q - Add a new session
     Mousetrap.bind('q', function() { self.onAddSessionRequested(); });
+    // S - Start current session
+    Mousetrap.bind('s', function() { self.onTimerStart(); });
     // [Space] - pause/resume
-    Mousetrap.bind('space', function() {
+    Mousetrap.bind('space', function(e: KeyboardEvent) {
       if (!self.sessionIsRunning && !self.sessionIsPaused) {
         return;
       }
+      e.preventDefault(); // space by default scrolls the page
       self.sessionIsPaused ? self.onTimerResume() : self.onTimerPause();
     });
     // S - start current session
