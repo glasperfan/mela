@@ -66,6 +66,14 @@ export class PlaylistService {
     this.cachePlaylist();
   }
 
+  moveSession(sessionIdx: number, newIdx: number): void {
+    const currentPlaylist = this._currentPlaylist$.value;
+    const editedPlaylist = _.cloneDeep(currentPlaylist);
+    editedPlaylist.sessions.splice(newIdx, 0, editedPlaylist.sessions.splice(sessionIdx, 1)[0]);
+    this._currentPlaylist$.next(editedPlaylist);
+    this.cachePlaylist();
+  }
+
   get TotalQueuedSessions(): number {
     return this._currentPlaylist$.value.sessions.length;
   }

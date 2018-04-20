@@ -23,7 +23,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   public sessionIsReady = false;
   public melaCounts: RewardsCounter;
   public melaKeys = MelaKeys;
-  public queuedSessions$: Observable<ISession[]>;
+  public queuedSessions: ISession[];
   public currentSession$: Observable<ISession>;
   private readonly sessionTimerElementId = 'session-timer';
   private readonly _subscriptions: Subscription[] = [];
@@ -32,7 +32,6 @@ export class TimerComponent implements OnInit, OnDestroy {
   private _editName: string;
 
   constructor(public playlistSvc: PlaylistService, public rewardsSvc: RewardsService, private zone: NgZone) {
-    this.queuedSessions$ = this.playlistSvc.currentPlaylist$.map(plylst => plylst.sessions);
     this.currentSession$ = this.playlistSvc.currentSession$;
     this.melaCounts = this.rewardsSvc.UserRewards;
   }
@@ -44,6 +43,9 @@ export class TimerComponent implements OnInit, OnDestroy {
     }
     this.createChart(this.sessionTimerElementId, MELA_SESSION_LENGTH);
     this._subscriptions.push(
+      this.playlistSvc.currentPlaylist$
+        .map(plylst => plylst.sessions)
+        .subscribe(sessions => this.queuedSessions = this.setDragEvents(sessions)),
       // If the first session is added, initialize the timer.
       this.playlistSvc.newSessionCreated$.subscribe(_ => {
         if (this.playlistSvc.TotalQueuedSessions === 1) {
@@ -55,7 +57,11 @@ export class TimerComponent implements OnInit, OnDestroy {
     this.activateHotkeyBindings();
   }
 
-  public activateHotkeyBindings(): void {
+  ngOnDestroy() {
+    this._subscriptions.forEach(s => s.unsubscribe());
+  }
+
+  activateHotkeyBindings(): void {
     const self = this;
     // Q - Add a new session
     Mousetrap.bind('q', function() { self.onAddSessionRequested(); });
@@ -74,8 +80,8 @@ export class TimerComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnDestroy() {
-    this._subscriptions.forEach(s => s.unsubscribe());
+  setDragEvents(sessions: ISession[]): ISession[] {
+    return sessions;
   }
 
   onAddSessionRequested(): void {
@@ -97,10 +103,6 @@ export class TimerComponent implements OnInit, OnDestroy {
     }
   }
 
-  onAddSessionInput(inputValue: string): void {
-    this.newSessionName = inputValue;
-  }
-
   onSubmitSessionInput(stillShowInput: boolean = false): void {
     this.playlistSvc.addSession(this.newSessionName.trim());
     this.showAddSession = stillShowInput;
@@ -112,16 +114,19 @@ export class TimerComponent implements OnInit, OnDestroy {
     this.newSessionName = '';
   }
 
+  onMoveSession(session: ISession, idx: number): void {
+    this.playlistSvc.moveSession(this.playlistSvc.currentPlaylist.sessions.indexOf(session), idx);
+  }
+
   onDeleteSession(sessionIdx: number): void {
     if (sessionIdx === 0) {
       this.createTimer();
-      if (this.playlistSvc.TotalQueuedSessions > 1) {
-        this.sessionIsReady = true;
-      } else {
-        this.sessionIsReady = false;
+      this.sessionIsReady = this.playlistSvc.TotalQueuedSessions > 1;
+      if (!this.sessionIsReady) {
         this.deleteTimer();
       }
     }
+    this.sessionIsRunning = false;
     this.sessionIsFinished = false;
     this.playlistSvc.deleteSession(sessionIdx);
   }

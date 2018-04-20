@@ -6,6 +6,7 @@ import { MainComponent, DashboardComponent, TimerComponent } from './components'
 import { Title, BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { DndModule } from 'ng2-dnd';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { HttpModule } from '@angular/http';
     FormsModule,
     HttpModule,
     CommonModule,
+    DndModule.forRoot(),
     MELA_ROUTES
   ],
   declarations: [

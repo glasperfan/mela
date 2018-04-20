@@ -36,7 +36,7 @@
 
   <!-- upcoming sessions -->
   <div class="section upcoming"
-  *ngIf="!(queuedSessions$ | async).length; else sessions"
+  *ngIf="!queuedSessions.length; else sessions"
   (click)="onAddFirstSessionPrompt()">
     <!-- no sessions -->
     <div class="session-item no-session-item">
@@ -46,10 +46,13 @@
     
   <!-- existing sessions -->
   <ng-template #sessions>
-    <div class="section upcoming">
-      <div class="session-item"
+    <div class="section upcoming" dnd-sortable-container [sortableData]="queuedSessions">
+      <div class="session-item" dnd-sortable
       [ngClass]="{'current': i === 0}"
-      *ngFor="let session of queuedSessions$ | async; let i = index"
+      *ngFor="let session of queuedSessions; let i = index"
+      [sortableIndex]="i"
+      [dragData]="todo"
+      (onDropSuccess)="onMoveSession(session, i)"
       (click)="onEditSessionRequested(i)">
         <div class="session-type">
             <img class="icon mela-icon" [src]="'assets/' + session.mela + '.png'" />
@@ -79,11 +82,11 @@
       <div class="session-type">
           <img class="icon mela-icon" src="assets/red-apple.png" />
       </div>
-      <input #sessionInput 
+      <input
             class="session-name add-session-input"
             type="text"
             placeholder="Name your 25-minute session"
-            (keyup)="onAddSessionInput(sessionInput.value)"
+            [(ngModel)]="newSessionName"
             (keyup.enter)="onSubmitSessionInput()"
             (keyup.esc)="onCancelSessionInput()">
       <div class="session-delete" (click)="onCancelSessionInput()">
