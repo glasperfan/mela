@@ -1,21 +1,19 @@
 import * as Cookies from 'js-cookie';
-import { MelaType, RewardsCounter } from '../models';
-
-export type RewardsCounter = { [key: string]: number };
+import { MelaType, IRewardsCounter } from '../models';
 
 export class RewardsService {
-    
-    private _userRewards: RewardsCounter;
-    private readonly RewardsCookieKey = "mela-counts";
+
+    private _userRewards: IRewardsCounter;
+    private readonly RewardsCookieKey = 'mela-counts';
 
     constructor() {
         this._userRewards = this.retrieveAwards(); // populate on init
     }
 
-    get UserRewards(): RewardsCounter {
+    get UserRewards(): IRewardsCounter {
         return this._userRewards;
     }
-    
+
     recordRewards(type: MelaType) {
         this._userRewards[type] += 1;
         this.cacheAwards();
@@ -25,13 +23,13 @@ export class RewardsService {
         this._userRewards = this.generateEmptyAwards();
         this.cacheAwards();
     }
-    
-    private retrieveAwards(): RewardsCounter {
+
+    private retrieveAwards(): IRewardsCounter {
         const cookie = Cookies.get(this.RewardsCookieKey);
-        return cookie ? JSON.parse(atob(cookie)) as RewardsCounter : this.generateEmptyAwards();
+        return cookie ? JSON.parse(atob(cookie)) as IRewardsCounter : this.generateEmptyAwards();
     }
 
-    private storeRewards(awards: RewardsCounter): void {
+    private storeRewards(awards: IRewardsCounter): void {
         Cookies.set(
             this.RewardsCookieKey,
             btoa(JSON.stringify(awards)),
@@ -42,7 +40,7 @@ export class RewardsService {
         this.storeRewards(this._userRewards);
     }
 
-    private generateEmptyAwards(): RewardsCounter {
+    private generateEmptyAwards(): IRewardsCounter {
         const melaCounts = {};
         for (const key of Object.values(MelaType)) {
             melaCounts[key] = 0;

@@ -3,7 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import { Timer } from './timer';
 import { PlaylistService, RewardsService } from '../services';
-import { ISession, RewardsCounter, MELA_SESSION_LENGTH, MelaKeys } from '../models';
+import { ISession, IRewardsCounter, MELA_SESSION_LENGTH, MelaKeys } from '../models';
 declare var d3: any;
 declare var Mousetrap: any;
 
@@ -21,7 +21,7 @@ export class TimerComponent implements OnInit, OnDestroy {
   public sessionIsRunning = false;
   public sessionIsPaused = false;
   public sessionIsReady = false;
-  public melaCounts: RewardsCounter;
+  public melaCounts: IRewardsCounter;
   public melaKeys = MelaKeys;
   public queuedSessions: ISession[];
   public currentSession$: Observable<ISession>;

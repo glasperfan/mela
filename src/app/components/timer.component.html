@@ -1,101 +1,97 @@
-<div class="main-display">
+<!-- page header -->
+<div class="page-header">timer</div>
 
-  <!-- page header -->
-  <div class="page-header">timer</div>
-
-  <!-- timer + streaks -->
-  <div class="section current">
-    <div id="clock">
-      <div id="session-timer"></div>
-      <div id="brake-timer"></div>
-    </div>
-    
-    <div class="subsection" id="timer">
-      <div class="header">countdown</div>
-      <div class="center-container">
-        <div class="info">{{currentTimer?.minutesLeftString || '00'}}:{{currentTimer?.secondsLeftString || '00'}}</div>
-        <div class="button timer-button" *ngIf="sessionIsReady" (click)="onTimerStart()">start</div>
-        <div class="button timer-button" *ngIf="sessionIsRunning" (click)="onTimerPause()">pause</div>
-        <div class="button timer-button" *ngIf="sessionIsPaused" (click)="onTimerResume()">resume</div>
-        <div class="button timer-button" *ngIf="shouldShowComplete" (click)="onTimerComplete()">complete</div>
-        <div class="button timer-button" *ngIf="shouldShowRedo" (click)="onRedoSession()">redo</div>
-      </div>
-    </div>
-    
-    <div class="subsection" id="streaks">
-      <div class="header">rewards</div>
-      <ul class="streaks">
-        <li *ngFor="let melaKey of melaKeys">
-            <img class="icon mela-icon" [src]="'assets/' + melaKey + '.png'" />
-            <div class="type-count">{{melaCounts[melaKey]}}</div>
-        </li>
-      </ul>
+<!-- timer + streaks -->
+<div class="section current">
+  <div id="clock">
+    <div id="session-timer"></div>
+    <div id="brake-timer"></div>
+  </div>
+  
+  <div class="subsection" id="timer">
+    <div class="header">countdown</div>
+    <div class="center-container">
+      <div class="info">{{currentTimer?.minutesLeftString || '00'}}:{{currentTimer?.secondsLeftString || '00'}}</div>
+      <div class="button timer-button" *ngIf="sessionIsReady" (click)="onTimerStart()">start</div>
+      <div class="button timer-button" *ngIf="sessionIsRunning" (click)="onTimerPause()">pause</div>
+      <div class="button timer-button" *ngIf="sessionIsPaused" (click)="onTimerResume()">resume</div>
+      <div class="button timer-button" *ngIf="shouldShowComplete" (click)="onTimerComplete()">complete</div>
+      <div class="button timer-button" *ngIf="shouldShowRedo" (click)="onRedoSession()">redo</div>
     </div>
   </div>
   
-  <hr/>
-
-  <!-- upcoming sessions -->
-  <div class="section upcoming"
-  *ngIf="!queuedSessions.length; else sessions"
-  (click)="onAddFirstSessionPrompt()">
-    <!-- no sessions -->
-    <div class="session-item no-session-item">
-      Ready to get started? Click here to make a mela.
-    </div>
+  <div class="subsection" id="streaks">
+    <div class="header">rewards</div>
+    <ul class="streaks">
+      <li *ngFor="let melaKey of melaKeys">
+          <img class="icon mela-icon" [src]="'assets/' + melaKey + '.png'" />
+          <div class="type-count">{{melaCounts[melaKey]}}</div>
+      </li>
+    </ul>
   </div>
-    
-  <!-- existing sessions -->
-  <ng-template #sessions>
-    <div class="section upcoming" dnd-sortable-container [sortableData]="queuedSessions">
-      <div class="session-item" dnd-sortable
-      [ngClass]="{'current': i === 0}"
-      *ngFor="let session of queuedSessions; let i = index"
-      [sortableIndex]="i"
-      [dragData]="todo"
-      (onDropSuccess)="onMoveSession(session, i)"
-      (click)="onEditSessionRequested(i)">
-        <div class="session-type">
-            <img class="icon mela-icon" [src]="'assets/' + session.mela + '.png'" />
-        </div>
-        <div class="session-name" *ngIf="!sessionInEditMode(i); else editMode">
-          {{session.name}}
-          <span class="current-time-left" *ngIf="i === 0">{{formatTimeLeft}}</span>
-        </div>
-        <ng-template #editMode>
-          <input #editInput 
-            class="session-name edit-session-input"
-            type="text"
-            placeholder="Name your 25-minute session"
-            [(ngModel)]="_editName"
-            (keyup.enter)="onSubmitEdit(i)"
-            (keyup.esc)="onCancelEdit(i)">
-        </ng-template>
-        <div class="session-delete" (click)="onDeleteSession(i)">
-          <img class="icon delete-icon" src="/assets/delete.png" />
-        </div>
-      </div>
-    </div>
-  </ng-template>
+</div>
 
-  <!-- add session -->
-  <div class="session-item" *ngIf="showAddSession">
+<hr/>
+
+<!-- upcoming sessions -->
+<div class="section upcoming"
+*ngIf="!queuedSessions.length; else sessions"
+(click)="onAddFirstSessionPrompt()">
+  <!-- no sessions -->
+  <div class="session-item no-session-item">
+    Ready to get started? Click here to make a mela.
+  </div>
+</div>
+  
+<!-- existing sessions -->
+<ng-template #sessions>
+  <div class="section upcoming" dnd-sortable-container [sortableData]="queuedSessions">
+    <div class="session-item" dnd-sortable
+    [ngClass]="{'current': i === 0}"
+    *ngFor="let session of queuedSessions; let i = index"
+    [sortableIndex]="i"
+    [dragData]="todo"
+    (onDropSuccess)="onMoveSession(session, i)"
+    (click)="onEditSessionRequested(i)">
       <div class="session-type">
-          <img class="icon mela-icon" src="assets/red-apple.png" />
+          <img class="icon mela-icon" [src]="'assets/' + session.mela + '.png'" />
       </div>
-      <input
-            class="session-name add-session-input"
-            type="text"
-            placeholder="Name your 25-minute session"
-            [(ngModel)]="newSessionName"
-            (keyup.enter)="onSubmitSessionInput()"
-            (keyup.esc)="onCancelSessionInput()">
-      <div class="session-delete" (click)="onCancelSessionInput()">
+      <div class="session-name" *ngIf="!sessionInEditMode(i); else editMode">
+        {{session.name}}
+        <span class="current-time-left" *ngIf="i === 0">{{formatTimeLeft}}</span>
+      </div>
+      <ng-template #editMode>
+        <input #editInput 
+          class="session-name edit-session-input"
+          type="text"
+          placeholder="Name your 25-minute session"
+          [(ngModel)]="_editName"
+          (keyup.enter)="onSubmitEdit(i)"
+          (keyup.esc)="onCancelEdit(i)">
+      </ng-template>
+      <div class="session-delete" (click)="onDeleteSession(i)">
         <img class="icon delete-icon" src="/assets/delete.png" />
       </div>
+    </div>
   </div>
+</ng-template>
 
-  <!-- add session button -->
-  <div class="button add-session" (click)="onAddSessionRequested()">+</div>
-
+<!-- add session -->
+<div class="session-item" *ngIf="showAddSession">
+    <div class="session-type">
+        <img class="icon mela-icon" src="assets/red-apple.png" />
+    </div>
+    <input
+          class="session-name add-session-input"
+          type="text"
+          placeholder="Name your 25-minute session"
+          [(ngModel)]="newSessionName"
+          (keyup.enter)="onSubmitSessionInput()"
+          (keyup.esc)="onCancelSessionInput()">
+    <div class="session-delete" (click)="onCancelSessionInput()">
+      <img class="icon delete-icon" src="/assets/delete.png" />
+    </div>
 </div>
+
+<!-- add session button -->
+<div class="button add-session" (click)="onAddSessionRequested()">+</div>

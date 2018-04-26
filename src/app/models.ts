@@ -66,4 +66,17 @@ export class Session implements ISession {
   }
 }
 
-export type RewardsCounter = { [key: string]: number };
+// rewards
+
+export interface IRewardsCounter {
+  [key: string]: number;
+}
+
+// navigation
+
+export enum NavPage {
+  Timer,
+  About,
+  Settings,
+  Stats
+}

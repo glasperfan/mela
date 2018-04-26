@@ -2,4 +2,4 @@
 src="assets/menu.png"
 (click)="playlistSvc.toggleDashboard = !playlistSvc.toggleDashboard" />
 <dashboard [style.marginLeft]="playlistSvc.toggleDashboard ? '0': '-160px'"></dashboard>
-<timer [style.width]="!playlistSvc.toggleDashboard ? '100%' : 'calc(100% - 160px)'"></timer>
+<display [style.width]="!playlistSvc.toggleDashboard ? '100%' : 'calc(100% - 160px)'"></display>
