@@ -18,6 +18,7 @@
         <div class="button timer-button" *ngIf="sessionIsRunning" (click)="onTimerPause()">pause</div>
         <div class="button timer-button" *ngIf="sessionIsPaused" (click)="onTimerResume()">resume</div>
         <div class="button timer-button" *ngIf="shouldShowComplete" (click)="onTimerComplete()">complete</div>
+        <div class="button timer-button" *ngIf="shouldShowRedo" (click)="onRedoSession()">redo</div>
       </div>
     </div>
     

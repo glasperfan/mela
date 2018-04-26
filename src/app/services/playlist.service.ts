@@ -34,12 +34,12 @@ export class PlaylistService {
   }
 
   get currentSession(): ISession {
-    const pl = this._currentPlaylist$.value;
+    const pl = this.currentPlaylist;
     return pl && pl.sessions && pl.sessions.length && pl.sessions[0];
   }
 
   addSession(sessionName: string): void {
-    const currentPlaylist = this._currentPlaylist$.value;
+    const currentPlaylist = this.currentPlaylist;
     const newSession = new Session(sessionName || 'Untitled');
     currentPlaylist.sessions.push(newSession);
     this._newSessionCreated$.next(newSession);
@@ -52,26 +52,36 @@ export class PlaylistService {
   }
 
   deleteSession(sessionIdx: number): void {
-    const currentPlaylist = this._currentPlaylist$.value;
+    const currentPlaylist = this.currentPlaylist;
     currentPlaylist.sessions.splice(sessionIdx, 1);
     this._currentPlaylist$.next(currentPlaylist);
     this.cachePlaylist();
   }
 
   updateSession(sessionIdx: number, newName: string): void {
-    const currentPlaylist = this._currentPlaylist$.value;
-    const editedPlaylist = _.cloneDeep(currentPlaylist);
+    const editedPlaylist = _.cloneDeep(this.currentPlaylist);
     editedPlaylist.sessions[sessionIdx].name = newName;
     this._currentPlaylist$.next(editedPlaylist);
     this.cachePlaylist();
   }
 
   moveSession(sessionIdx: number, newIdx: number): void {
-    const currentPlaylist = this._currentPlaylist$.value;
-    const editedPlaylist = _.cloneDeep(currentPlaylist);
+    const editedPlaylist = _.cloneDeep(this.currentPlaylist);
     editedPlaylist.sessions.splice(newIdx, 0, editedPlaylist.sessions.splice(sessionIdx, 1)[0]);
     this._currentPlaylist$.next(editedPlaylist);
     this.cachePlaylist();
+  }
+
+  completeAndRedoCurrentSession(): void {
+    const editedPlaylist = _.cloneDeep(this.currentPlaylist);
+    const redoSession = this.cloneSession(this.currentSession);
+    editedPlaylist.sessions.splice(0, 1, redoSession);
+    this._currentPlaylist$.next(editedPlaylist);
+    this.cachePlaylist();
+  }
+
+  cloneSession(s: ISession): ISession {
+    return _.cloneDeep(s);
   }
 
   get TotalQueuedSessions(): number {

@@ -159,6 +159,19 @@ export class TimerComponent implements OnInit, OnDestroy {
     this._editName = undefined;
   }
 
+  onRedoSession(): void {
+    // update streak
+    this.rewardsSvc.recordRewards(this.playlistSvc.currentSession.mela);
+    // redo current session (clone and replace)
+    this.playlistSvc.completeAndRedoCurrentSession();
+    // reset timer
+    this._timerSubscription.unsubscribe();
+    this._timerSubscription = undefined;
+    this.createTimer();
+    // start
+    this.onTimerStart();
+  }
+
   onTimerEnd(): void {
     this.sessionIsFinished = true;
   }
@@ -184,6 +197,7 @@ export class TimerComponent implements OnInit, OnDestroy {
       this._timerSubscription = this.currentTimer.timerEnded$.subscribe(() => setTimeout(() => this.onTimerEnd(), 0));
       this.sessionIsReady = false;
       this.sessionIsRunning = true;
+      this.sessionIsFinished = false;
     });
   }
 
@@ -209,6 +223,10 @@ export class TimerComponent implements OnInit, OnDestroy {
 
   deleteTimer(): void {
     this.currentTimer = undefined;
+  }
+
+  get shouldShowRedo(): boolean {
+    return this.sessionIsFinished;
   }
 
   get shouldShowComplete(): boolean {
